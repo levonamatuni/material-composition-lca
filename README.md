@@ -5,7 +5,7 @@ CML, Leiden University
 
 General description:
 This software allows estimating the material composition of various products reported in the ecoinvent LCI database.
-The software originated withing a scientific work described in the following article where the methodological steps are described in detail: {article submitted to publishe}
+The software originated withing a scientific work described in the following article where the methodological steps are described in detail: {article submitted to publisher}
 
 How to:
 1. Use either Activity Browser or Brightway to create a new project and get access to the ecoinvent database version 3.6
