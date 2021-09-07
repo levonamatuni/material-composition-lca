@@ -1,0 +1,19 @@
+
+ 'passenger car production, petrol/natural gas' (kilogram, GLO, None)  from  conseq36
+ 0.18205  kg of  non-renewable resources, aluminium  in  1   passenger car production, petrol/natural gas  0.19593  kg of  non-renewable resources, aluminium  in  0.260129659643436   market for internal combustion engine, passenger car  -0.01389  kg of  non-renewable resources, aluminium  in  0.739870340356564   market for glider, passenger car  0.0  kg of  non-renewable resources, aluminium  in  1.0   market for manual dismantling of used passenger car with internal combustion engine  0.0  kg of  non-renewable resources, aluminium  in  -0.000632003517646076   market for waste mineral oil  0.0  kg of  non-renewable resources, aluminium  in  -1.46239140633944e-05   market for waste mineral oil  0.0  kg of  non-renewable resources, aluminium  in  -0.00188037256829053   market for waste mineral oil  0.0  kg of  non-renewable resources, aluminium  in  -0.00406147951605618   market group for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -0.000197068851039312   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -1.83862394122129e-05   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -8.22716639668496e-05   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -0.00213815216893682   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -2.79205305535981e-05   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -4.47082871937661e-06   market for waste glass  0.0  kg of  non-renewable resources, aluminium  in  -0.0201502502013156   market for waste glass 
+ 'passenger car production, petrol/natural gas' (kilogram, GLO, None)  from  conseq36
+ 0.18205  kg of  non-renewable resources, aluminium  in  1   passenger car production, petrol/natural gas 
+ 'market for glider, passenger car' (kilogram, GLO, None)  from  conseq36
+ -0.01877  kg of  non-renewable resources, aluminium  in  1   market for glider, passenger car 
+ 'glider production, passenger car' (kilogram, GLO, None)  from  conseq36
+ -0.01877  kg of  non-renewable resources, aluminium  in  1   glider production, passenger car 
+ 'market for reinforcing steel' (kilogram, GLO, None)  from  conseq36
+ -0.03049  kg of  non-renewable resources, aluminium  in  1   market for reinforcing steel  0.00214  kg of  non-renewable resources, aluminium  in  1   market for reinforcing steel 
+ 'reinforcing steel production' (kilogram, RoW, None)  from  conseq36
+ -0.03049  kg of  non-renewable resources, aluminium  in  1   reinforcing steel production 
+ 'market for steel, unalloyed' (kilogram, GLO, None)  from  conseq36
+ -0.04596  kg of  non-renewable resources, aluminium  in  1   market for steel, unalloyed  0.00143  kg of  non-renewable resources, aluminium  in  1   market for steel, unalloyed 
+ 'steel production, converter, unalloyed' (kilogram, RoW, None)  from  conseq36
+ 0.0014  kg of  non-renewable resources, aluminium  in  1   steel production, converter, unalloyed  0.0005  kg of  non-renewable resources, aluminium  in  1   steel production, converter, unalloyed 
+ 'market for electricity, medium voltage' (kilowatt hour, JO, None)  from  conseq36
+ 0.0  kg of  non-renewable resources, aluminium  in  1   market for electricity, medium voltage  6e-05  kg of  non-renewable resources, aluminium  in  1   market for electricity, medium voltage  6e-05  kg of  non-renewable resources, aluminium  in  1   market for electricity, medium voltage  nan  kg of  non-renewable resources, aluminium  in  1   market for electricity, medium voltage 
