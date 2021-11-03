@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+
+# Copyright 2021 Netherlands eScience Center and CML, Leiden University
+# Licensed under the Apache License, version 2.0. See LICENSE for details.
+
 """
 Created on Thu Aug 22 18:01:26 2019
 
