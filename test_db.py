@@ -82,14 +82,16 @@ for exc in act.technosphere():
     exc.save()
     
 #LCI prior to changing the technosphere matrix (filtering out non-incorporated flows)
-print("BEFORE filtering:\n")
+print("BEFORE filtering (MC does not make sense):\n")
 functional_unit = {act: 1}
 method_key = [x for x in bw.methods if "copper" in x][0] #pick the environmental pressure (extracted material/resource from the list of impact methods)
 lca = bw.LCA(functional_unit, method_key) 
 
 lca.lci()
+lca.lcia()
 
 list_techno_inventory(lca)
+print("Material composition (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
 composition(materials_dict, lca)
 
 #LCI afyer changing the technosphere matrix (filtering out non-incorporated flows)
@@ -106,7 +108,7 @@ lca.lci_calculation()
 lca.lcia()
 
 list_techno_inventory(lca)
-print("Impact method selected by the user: ", method_key, ' : ', lca.score, '\n')
+print("Material composition (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
 composition(materials_dict, lca)
 
 
