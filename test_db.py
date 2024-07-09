@@ -1,29 +1,50 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 Netherlands eScience Center and CML, Leiden University
+# Copyright 2024 Netherlands eScience Center and CML, Leiden University
 # Licensed under the Apache License, version 2.0. See LICENSE for details.
 
 """
-Created on Wed Jul 17 18:52:09 2019
+Created on Wed Jul 17 2019
+Updated on Tue Jul 09 2024
 
 @author: amatunilt
 """
 
-#from brightway2 import *
-import brightway2 as bw
-import numpy as np
+#NOTES:
+#   This script allows the material filtering algorithm to be performed on a simplified 
+#   laptop supply chain (manually pre-constructed as a 'db' database using Activity Browser software).
+#   The goal to showcase how the material compositions (MC) of products can be estimated using such LCI databases.
+#   This script and the terminology used are based on the approach described in detail in the corresponding scientific publication.
+#   Paper: __________REF_______
+#   We highly recommend visiting that work first for a solid understanding and implementation of this product composition estimation algorithm. 
 
-#CONST
-PROD = 'laptop'
+#REQUIREMENTS: 
+#   To sun this script in Spyder we first prepared a separate conda environment with an installed Brightway framework.   
+#   Basic understanding of Pythin and Brightway is required to be able to replicate this code for your own products/materials/LCI database  
 
 
-bw.projects.set_current("default")
-#bw2setup()
+#IMPORTS:
+import brightway2 as bw #import Brightway package 
+import numpy as np #import Numpy package 
 
-db = bw.Database("db")
-list_dissip = {"factory"}
+#CONSTANTS:
+PROD = 'laptop' #the name of the reference product (unit process) of interest whose MC we aim to estimate
 
-#dictionary relates meaningful materials with the corresponding/contributing activities (their keys)
+
+#PREPARATIONS:
+    
+#bw.bw2setup() #Set up the Brightway2 environment (if not already set up)
+#bw.projects.new_project("My LCA project") #Create a new Brightway project named "My LCA project", 
+bw.projects.set_current("default") #Opens the existing default project
+db = bw.Database("db") #Imports the selected LCI database (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper (incl. copper extraction, factory, motherboard production, etc)
+
+#THE VOID LIST:
+#   Here we define the list of keywords (inputs) that will be filtered our from the supply chain as being non-incorporated in the following products (see the Paper)
+list_dissip = {"factory"} 
+
+#MATERIAL SELECTION
+#   Here we define a dictionary that links the materials of interest to the corresponding producing unit processes (activities keys) in the LCI database (see Paper)
+#   The selected values can be further summed to obtain the MC estimates for more aggregated material categories (e.g. plastics or metals).  
 materials_dict = {
         "plastics":
             {"PET": [],
@@ -33,6 +54,9 @@ materials_dict = {
             {"copper": [('db', '9d4a7be1e15944dcb936132aea869546')]
             }
 }
+    
+#FUNCTIONS:
+#   Here, we defined functions used in the algorithm
 
 def activity_by_name(name, db):
     candidates = [x for x in db if name in x['name']]
