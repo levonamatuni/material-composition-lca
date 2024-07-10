@@ -58,12 +58,13 @@ materials_dict = {
 #FUNCTIONS:
 #   Here, we defined functions used in the algorithm
 
+#This function allows to select acivity object from the 'db' LCI database based on a presence of the word 'name' in its name  
 def activity_by_name(name, db):
     candidates = [x for x in db if name in x['name']]
     return candidates[0]
 
-#obtain activity object given its key (tuple(db, key))
-def activity_by_key(key): # tuple(db, key) -> activity (dataset)
+#Obtain activity object given its 'key': tuple(db, key) -> activity/dataset
+def activity_by_key(key): 
     return db.get(key[1])
 
 #list all intermediate (technosphere) flows (activities) in the resulting supply array based on LCI analysis
