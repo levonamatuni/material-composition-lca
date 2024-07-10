@@ -67,15 +67,15 @@ def activity_by_name(name, db):
 def activity_by_key(key): 
     return db.get(key[1])
 
-#list all intermediate (technosphere) flows (activities) in the resulting supply array based on LCI analysis
+#List all intermediate (technosphere) flows (activities) in the resulting supply-array (see the Paper) stored in the reuslting 'lca' object
 def list_techno_inventory(lca):
     print("Supply array: ")
     for k in lca.activity_dict:
         print(activity_by_key(k)["name"], ": ", lca.supply_array[lca.activity_dict[k]])
     print('\n')
     
-#aggregate and print material fllows from the resulting supply_array based on the predefined 'material dictionary'
-def composition(materials_dict, lca): #presents product composition from the exisitng lca object based on the metrials dicionary
+#Given predefined 'materials_dict' (see above), aggregates and prints resulting material fllows (MC of a product) using the 'supply_array' from the resulting 'lca' object
+def composition(materials_dict, lca):
     print("Material composition (based on supply array): ")
     for material_group in materials_dict:
         gr_sum = 0
@@ -88,16 +88,20 @@ def composition(materials_dict, lca): #presents product composition from the exi
         print(material_group, "in total : ", gr_sum, ' kg')
     print('\n')
     
-#print technospheere matrix (A)
+#Prints technospheere matrix (A)
 def print_techno_matrix(lca):
     matrix_size = np.shape(lca.technosphere_matrix)[0]
     for i in range(matrix_size):
         print("\n")
         for j in range(matrix_size):
             print(lca.technosphere_matrix[i, j], end = ' ')         
-        
-#MAIN code
 
+
+     
+#MAIN CODE:
+#   Here, our algorithm starts executing using the variables and functions provided above
+
+#selecting the activity that represents (produces) the product ('PROD') of interest within given LCI database 'db'
 act = activity_by_name(PROD, db)
 
 #assigning 'dissipation' parameter
