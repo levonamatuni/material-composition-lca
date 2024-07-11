@@ -104,9 +104,7 @@ def print_techno_matrix(lca):
 #selecting the activity that represents (produces) the product ('PROD') of interest within given LCI database 'db'
 act = activity_by_name(PROD, db)
 
-#assigning material incorporation parameter ('dissip'), see the Paper, to each (intermediate) flow ('exc') in the database; 
-#here, filtering out is done in an automatic manner, based on the list of keywords to avoid ('list_dissip') 
-#here 0 or 1 but can be anything in between
+#assigning 'dissipation' parameter
 for exc in act.technosphere():
     exc_name = activity_by_key(exc["input"])["name"]
     exc['dissip'] = 1 if exc_name in list_dissip else 0
