@@ -29,7 +29,7 @@ import numpy as np #import Numpy package
 
 #CONSTANTS:
 PROD = 'laptop' #the name of the reference product (unit process) of interest whose MC we aim to estimate
-
+MAT  = 'cooper' #the material of interest (the appropariate flow in the LCI database will be selected later on based on this name)
 
 #PREPARATIONS:
     
@@ -51,7 +51,7 @@ materials_dict = {
              "PP": [],
             },
         "metals":
-            {"copper": [('db', '9d4a7be1e15944dcb936132aea869546')]
+            {MAT: [('db', '9d4a7be1e15944dcb936132aea869546')]
             }
 }
     
@@ -67,14 +67,16 @@ def activity_by_name(name, db):
 def activity_by_key(key): 
     return db.get(key[1])
 
-#List all intermediate (technosphere) flows (activities) in the resulting supply-array (see the Paper) stored in the reuslting 'lca' object
+#List all intermediate (technosphere) flows (activities) in the resulting supply-array (see the Paper) that is stored in the reuslting 'lca' object
 def list_techno_inventory(lca):
     print("Supply array: ")
     for k in lca.activity_dict:
         print(activity_by_key(k)["name"], ": ", lca.supply_array[lca.activity_dict[k]])
     print('\n')
     
-#Given predefined 'materials_dict' (see above), aggregates and prints resulting material fllows (MC of a product) using the 'supply_array' from the resulting 'lca' object
+#Given predefined 'materials_dict' (see above), aggregates and prints 
+# resulting material fllows (MC or MF of a product, depending if filtering was applied) 
+# using the 'supply_array' from the resulting 'lca' object
 def composition(materials_dict, lca):
     print("Material composition (based on supply array): ")
     for material_group in materials_dict:
@@ -104,7 +106,8 @@ def print_techno_matrix(lca):
 #selecting the activity that represents (produces) the product ('PROD') of interest within given LCI database 'db'
 act = activity_by_name(PROD, db)
 
-#assigning material incorporation parameter ('dissip'), see the Paper, to each (intermediate) flow ('exc') in the database; 
+#assigning material incorporation parameter ('dissip'), see the Paper, to each (intermediate) flow ('exc') in the database 
+#in this case we scan only inputs of the reference activity 'act', whereas in full algorithm whole database should be scanned; 
 #here, filtering out is done in an automatic manner, based on the list of keywords to avoid ('list_dissip') 
 #here 0 or 1 but can be anything in between
 for exc in act.technosphere():
@@ -112,34 +115,47 @@ for exc in act.technosphere():
     exc['dissip'] = 1 if exc_name in list_dissip else 0
     exc.save()
     
-#LCI prior to changing the technosphere matrix (filtering out non-incorporated flows)
-print("BEFORE filtering (MC does not make sense):\n")
+#selecting the functional unit (quantity of the reference product of interest, e.g. one laptop)
 functional_unit = {act: 1}
-method_key = [x for x in bw.methods if "copper" in x][0] #pick the environmental pressure (extracted material/resource from the list of impact methods)
+
+#pick the material of interest (extracted resource) from the list of impact methods 
+method_key = [x for x in bw.methods if MAT in x][0] 
+
+#prepare an 'lca' object based on the funtional unit and the impact method (see Brightway 2 framework)
 lca = bw.LCA(functional_unit, method_key) 
 
+#running LCIA prior to filtering out the non-incorporated flows 
 lca.lci()
 lca.lcia()
 
+#list 1) the resulting supply-array prior to filtering, 
+# 2) the MF of the product and material of interest,
+# 3) the aggregated MF of the product for all materials listed in the dictionary above;
+# see the Paper for terminology: inventory vector, supply-array, MC, MF, material aggregation dictionary, etc
+print("BEFORE filtering:\n")
 list_techno_inventory(lca)
-print("Material composition (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
+print("Material footprint, MF (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
 composition(materials_dict, lca)
 
-#LCI afyer changing the technosphere matrix (filtering out non-incorporated flows)
-print("AFTER filtering:\n")
-
-#removing the non-incorporated inputs from the technosphere matrix 
+#removing the non-incorporated inputs from the reference product activity in the technosphere matrix 
+# based on the non-incorporation parameter ('dissip') applied above (see Paper for the description of this param.)
 for exc in act.technosphere():
     if  exc['dissip']:
         row = lca.activity_dict[exc["input"]]
         col = lca.activity_dict[act.key]
         lca.technosphere_matrix[row, col] = 0
 
+#running LCIA again after filtering out the non-incorporated flows
 lca.lci_calculation()
 lca.lcia()
 
+#lists 1) the resulting supply-array after filtering, 
+# 2) the MC of the product and material of interest based on the inventory vector,  
+# 3) the aggregated MC of the product for all materials listed in the dictionary above;
+# see the Paper for terminology: inventory vector, supply-array, MC, MF, material aggregation dictionary, etc
+print("AFTER filtering:\n")
 list_techno_inventory(lca)
-print("Material composition (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
+print("Material composition, MC (based on inventory vector): \n", method_key, ' : ', lca.score, '\n')
 composition(materials_dict, lca)
 
 
