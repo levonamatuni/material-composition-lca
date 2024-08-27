@@ -19,7 +19,7 @@ Updated on Tue Jul 09 2024
 #   We highly recommend visiting that work first for a solid understanding and implementation of this product composition estimation algorithm. 
 
 #REQUIREMENTS: 
-#   To sun this script in Spyder we first prepared a separate conda environment with an installed Brightway framework.   
+#   To sun this script in Spyder we first prepared a separate conda environment with an installed Brightway 2 (not 2.5!) framework.   
 #   Basic understanding of Pythin and Brightway is required to be able to replicate this code for your own products/materials/LCI database  
 
 
