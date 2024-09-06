@@ -19,6 +19,11 @@ import numpy as np
 import json
 import csv
 import sys
+import os
+
+# Get the directory where the script is located and set the current working directory to the script's directory
+script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+os.chdir(script_dir)
 
 #CONSTANTS
 FLOAT_RND = 5
@@ -305,7 +310,7 @@ db = Database("conseq36")
 db_inc_filter(db, avoid_activities)
 
 
-#act = activity_by_name(LAPTOP, db)
+act = activity_by_name(LAPTOP, db)
 
 #for exc in act.technosphere():
 #   print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
@@ -367,3 +372,4 @@ db_inc_filter(db, avoid_activities)
 #         composition_tech(act, 1, materials_dict, db, True, prod_wght[prod_list.index(prod)])
 #         #composition_tech(act, 1, materials_dict, db, False, prod_wght[prod_list.index(prod)])
         
+print('DONE')
