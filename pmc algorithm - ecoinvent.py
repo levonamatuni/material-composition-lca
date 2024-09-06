@@ -1,14 +1,29 @@
 # -*- coding: utf-8 -*-
 
-# Copyright 2021 Netherlands eScience Center and CML, Leiden University
+# Copyright 2024 Netherlands eScience Center and CML, Leiden University
 # Licensed under the Apache License, version 2.0. See LICENSE for details.
 
 """
 Created on Thu Aug 22 18:01:26 2019
-
 @author: amatunilt
 """
 
+#NOTES:
+#   This script allows to estimate the material composition (MC) of products using real product datasets in ecoinvent database.
+#   See paper: Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology. https://doi.org/10.1111/jiec.13538
+#   We highly recommend visiting this paper first for a solid understanding of the implementation of this product composition estimation algorithm.
+#   We also suggest first reviewing a simpler and more universal script "pmc algorithm - general.py" for detailed comments for each code line.
+#   This script is an extension of that general script tailoring it to perform on the ecoinvent database. 
+#   The comments under this script will be rather limited. 
+
+#REQUIREMENTS: 
+#   To run this script in Spyder or VS Code we first prepared a separate conda environment with an installed Brightway 2 (not 2.5!) framework and the Activity Browser GUI on top.
+#   Installing Activity Browser in a separate conda environment as instructed on the AB website will install Brightway and all the packages needed, so this is a good starting point.  
+#   Basic understanding of Pythin and Brightway is required to be able to replicate this code for your own products/materials/LCI database  
+#   Reading the paper: Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology. https://doi.org/10.1111/jiec.13538
+#   Reviewing explanatory comments under the general script first.
+
+#IMPORTS:
 from brightway2 import *
 from bw2analyzer.matrix_grapher import SparseMatrixGrapher
 from functools import cmp_to_key
@@ -42,7 +57,7 @@ db_list = ['cutoff36', 'apos36', 'conseq36']
 prod_list = [CAR_P, LAPTOP, FRIDGE]
 prod_wght = [1, 3.15, 60] #kg per product from Ecoinvent 3.6
 mat_list = [Cu, Al, Ta]
-FILE_OUT = 'project_minsitry_MC.txt'
+FILE_OUT = 'output.txt'
 
 
 avoid_activities              = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
@@ -305,8 +320,8 @@ def db_to_csv(db): #save datasets (name, key) into the csv file
 
 #bw2setup() #Importing elementary flows, LCIA methods and some other data
 
-projects.set_current("test2")
-db = Database("conseq36")
+projects.set_current("default")
+db = Database("consequential310")
 db_inc_filter(db, avoid_activities)
 
 

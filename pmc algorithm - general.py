@@ -5,8 +5,6 @@
 
 """
 Created on Wed Jul 17 2019
-Updated on Tue Jul 09 2024
-
 @author: amatunilt
 """
 
@@ -15,7 +13,7 @@ Updated on Tue Jul 09 2024
 #   laptop supply chain (manually pre-constructed as a 'db' database using Activity Browser software).
 #   The goal to showcase how the material compositions (MC) of products can be estimated using such LCI databases.
 #   This script and the terminology used are based on the approach described in detail in the corresponding scientific publication.
-#   Paper: __________REF_______
+#   Paper: Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology. https://doi.org/10.1111/jiec.13538
 #   We highly recommend visiting that work first for a solid understanding and implementation of this product composition estimation algorithm. 
 #
 #   In case if you would like to start this script running asap, use the db_database.csv and db_database_copper flow.svg files 
@@ -29,8 +27,10 @@ Updated on Tue Jul 09 2024
 #   you will need to correct them with the new keys that will be generated in your project. 
 
 #REQUIREMENTS: 
-#   To sun this script in Spyder we first prepared a separate conda environment with an installed Brightway 2 (not 2.5!) framework.   
+#   To run this script in Spyder or VS Code we first prepared a separate conda environment with an installed Brightway 2 (not 2.5!) framework and the Activity Browser GUI on top.
+#   Installing Activity Browser in a separate conda environment as instructed on the AB website will install Brightway and all the packages needed, so this is a good starting point.  
 #   Basic understanding of Pythin and Brightway is required to be able to replicate this code for your own products/materials/LCI database  
+#   Reading the paper: Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology. https://doi.org/10.1111/jiec.13538
 
 #IMPORTS:
 import brightway2 as bw #import Brightway package 
@@ -39,7 +39,7 @@ import numpy as np #import Numpy package
 #CONSTANTS:
 PROD = 'laptop' #the name of the reference product (unit process) of interest whose MC we aim to estimate; there should be an activity named PROD in your 'db' database, otherwise an error will pop-up
 BIO_MAT_LIST  = ["Copper", "Oil, crude"] #the natural material of interest (the appropariate flow in the biospere database will be selected later on based on this name). The name should start with the capital letter (see conventional names of materials/metals in the biosphere3 database)
-DB_NAME   = 'db' #the LCI database that will be imported and used (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper (incl. copper extraction, factory, motherboard production, etc)
+DB_NAME   = 'db' #the LCI database that will be imported and used (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper referenced below (incl. copper extraction, factory, motherboard production, etc)
 KEY_index = 1 #index of the actual activity/bioflow key in a conventional tuple key like (db, key)  
 
 #PREPARATIONS:
