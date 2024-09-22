@@ -59,11 +59,18 @@ prod_wght = [1, 3.15, 60] #kg per product from Ecoinvent 3.6
 mat_list = [Cu, Al, Ta]
 FILE_OUT = 'output.txt'
 
+#PREPARATIONS:
+#bw2setup() #set up the Brightway2 environment (if not already set up)
+#assumed that you already have default bw env and ecoinvent database that is called 'consequential310' - change if needed
+projects.set_current("default")
+db = Database("consequential310")
 
+#DEFINE AVOID LISTS
 avoid_activities              = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
-avoid_activities_paper          = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "scrap"]
+avoid_activities_paper        = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "scrap"]
 avoid_activities_scrap        = ["scrap"]
     
+#MATERIAL SELECTION
 materials_dict_cutoff36 = { #this are markets based (since they conveniently include all the regional prod. activities and there's no need to list them separately)
     "metals":
         {"copper_m": [('cutoff36', 'b4f2456cf9cbe7dfeb67c91780bd3e38')],
@@ -77,7 +84,6 @@ materials_dict_cutoff36 = { #this are markets based (since they conveniently inc
         }
 }
 
-    
 materials_dict_apos36 = { #this are markets based (since they conveniently include all the regional prod. activities and there's no need to list them separately)
     "metals":
         {"copper_m": [('apos36', 'b10b9e09d7ed10fa896c067e4c05092b')],
@@ -114,7 +120,7 @@ with open('dict_gen/plastics_dict_apos36_m.json', 'r') as fp:
 with open('dict_gen/plastics_dict_conseq36_m.json', 'r') as fp:
     materials_dict_conseq36["plastics"] = json.load(fp) 
     
-
+#FUNCTIONS:
 def activity_by_name(name, db): #return first activity dataset based on name keyword
     candidates = [x for x in db if name in x['name']]
     candidates = sorted(candidates, key=cmp_to_key(lambda item1, item2: len(item1['name']) - len(item2['name'])))  #shortest name is the best match
@@ -184,7 +190,7 @@ def db_inc_filter_del_neg(db, avoid_activities): #resets inc. parameter in the o
             exc.save()
     print('\n')
     
-def db_inc_reset(db): #all inc -> 1
+def db_inc_reset(db): ##restore all the original amounts of the exchanges -> 1
     i = 0
     prt = -1
     for act in db:
@@ -292,18 +298,6 @@ def db_inc_to_amounts(db): #adjust all the amounts of the exchanges based on the
         for exc in act.technosphere():
             exc['amount'] = exc['amount_save'] * exc['incorporated']
             exc.save()    
-            
-# =============================================================================
-# def db_inc_reset(db): #restore all the original amounts of the exchanges
-#     for act in db:
-#         for exc in act.technosphere():
-#             try:
-#                 t = exc['incorporated']
-#             except:
-#                 exc['incorporated'] = 1.0
-#                 exc.save()
-# =============================================================================
-
 
 def db_to_csv(db): #save datasets (name, key) into the csv file
     #generate a list of act. names and their keys
@@ -316,22 +310,20 @@ def db_to_csv(db): #save datasets (name, key) into the csv file
         writer.writerows(list)
     return str(db) + " saved into " + db.name + '.csv'
 
-#EXECUTE - START
+#MAIN CODE:
 
-#bw2setup() #Importing elementary flows, LCIA methods and some other data
-
-projects.set_current("default")
-db = Database("consequential310")
-db_inc_filter(db, avoid_activities)
-
+#db_inc_filter(db, avoid_activities) #run through ecoinvent and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords to avoid 'avoid_activities'
 
 act = activity_by_name(LAPTOP, db)
+print(act)
 
-#for exc in act.technosphere():
-#   print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
-   
-#for exc in act.technosphere():
-#   print(exc.as_dict())
+#lists incorporation parameters fro all inputs of the process 'act'
+for exc in act.technosphere():
+   print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
+
+#lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
+for exc in act.technosphere():
+   print(exc.as_dict())
 
 # projects.set_current("test1")
 # print('\nTest1: Filter out all negative & avoid list\n')
