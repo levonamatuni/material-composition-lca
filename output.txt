@@ -10,3 +10,20 @@
  'computer production, laptop' (unit, GLO, None)  from  consequential310
 
  'computer production, laptop' (unit, GLO, None)  from  consequential310
+
+ 'computer production, laptop' (unit, GLO, None)  from  consequential310
+
+ 'computer production, laptop' (unit, GLO, None)  from  consequential310
+
+ 'passenger car production, petrol/natural gas' (kilogram, GLO, None)  from  consequential310
+
+ 'computer production, laptop' (unit, GLO, None)  from  consequential310
+
+ 'passenger car production, petrol/natural gas' (kilogram, GLO, None)  from  consequential310
+
+ 'computer production, laptop' (unit, GLO, None)  from  consequential310
+
+ 'passenger car production, petrol/natural gas' (kilogram, GLO, None)  from  consequential310
+ 0.04201  kg of  non-renewable resources, copper  in  1   passenger car production, petrol/natural gas  0.04201  kg of  non-renewable resources, aluminium  in  1   passenger car production, petrol/natural gas  0.04201  kg of  non-renewable resources, tantalum  in  1   passenger car production, petrol/natural gas 
+ 'computer production, laptop' (unit, GLO, None)  from  consequential310
+ 1.43751  kg of  non-renewable resources, copper  in  1   computer production, laptop  1.43751  kg of  non-renewable resources, aluminium  in  1   computer production, laptop 

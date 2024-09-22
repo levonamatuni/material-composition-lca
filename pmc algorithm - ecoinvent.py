@@ -53,7 +53,7 @@ CAR_E_motor = 'electric motor production, vehicle (electric powertrain)'
 SCOOTER_E_motor = 'electric motor production, for electric scooter'
 FERRY = 'ferry production'
 BUTTER = 'butter production, from cow milk'
-db_list = ['cutoff36', 'apos36', 'conseq36']
+db_list = ['consequential310']
 prod_list = [CAR_P, LAPTOP, FRIDGE]
 prod_wght = [1, 3.15, 60] #kg per product from Ecoinvent 3.6
 mat_list = [Cu, Al, Ta]
@@ -67,8 +67,6 @@ db = Database("consequential310")
 
 #DEFINE AVOID LISTS
 avoid_activities              = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
-avoid_activities_paper        = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "scrap"]
-avoid_activities_scrap        = ["scrap"]
     
 #MATERIAL SELECTION
 materials_dict_cutoff36 = { #this are markets based (since they conveniently include all the regional prod. activities and there's no need to list them separately)
@@ -102,12 +100,6 @@ materials_dict_conseq36 = { #this are markets based (since they conveniently inc
          "aluminium, primary, ingot": [('conseq36', 'dfc6a0f5aa7a87769f2e9969b1aa1415'), ('conseq36', '04367b396c75e63fdb750d3f066d98f6')],
          "tantalum_m": [('conseq36', '0bd909249117a7e7e09f2973cbda6a3a')]
         }
-}
-
-materials_dict_toymodel = {
-    "plastics": {
-        "plastic": [('toy model', '9273337cf4cb4814b60808ddf86a0e55')]
-    }
 }
 
 #import materials_dict from JSON
@@ -230,8 +222,8 @@ def lca_exclude_noninc(db, lca): #edit lca techn. matrix (exclude non-incorporat
 
 def LCA_create(act, FU, material_bioflow, db): #create LCA object based on the reference product in db (production act) and the bioflow of interest     
     functional_unit = {act: FU}
-    method_key = [x for x in methods if material_bioflow in x][0]    
-    return LCA(functional_unit, method_key)
+    method_key = ('ReCiPe 2016 v1.03, endpoint (H)', 'natural resources', 'material resources: metals/minerals')
+    return bw.LCA(functional_unit, method_key)
 
 def composition_bio(act, FU, material_bioflow, db, exclude):
     lca = LCA_create(act, FU, material_bioflow, db)
@@ -318,22 +310,20 @@ act = activity_by_name(LAPTOP, db)
 print(act)
 
 #lists incorporation parameters fro all inputs of the process 'act'
-for exc in act.technosphere():
-   print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
+# for exc in act.technosphere():
+#    print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
 
 #lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
-for exc in act.technosphere():
-   print(exc.as_dict())
+# for exc in act.technosphere():
+#    print(exc.as_dict())
 
-# projects.set_current("test1")
-# print('\nTest1: Filter out all negative & avoid list\n')
-# for prod in prod_list:
-#     for db_name in db_list:
-#         db = Database(db_name)
-#         act = activity_by_name(prod, db)
-#         for mat in mat_list:
-#             lca = composition_bio(act, 1, mat, db, True)
-#             print(' OR ', round(lca.score/prod_wght[prod_list.index(prod)] * 100, FLOAT_RND), '%')
+for prod in prod_list:
+    for db_name in db_list:
+        db = Database(db_name)
+        act = activity_by_name(prod, db)
+        for mat in mat_list:
+            lca = composition_bio(act, 1, mat, db, True)
+            print(' OR ', round(lca.score/prod_wght[prod_list.index(prod)] * 100, FLOAT_RND), '%')
 
 # for prod in prod_list:
 #     for db_name in db_list:
