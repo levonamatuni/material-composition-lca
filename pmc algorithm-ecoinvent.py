@@ -25,8 +25,12 @@ Created on Thu Aug 22 18:01:26 2019
 
 #IMPORTS:
 from brightway2 import *
+from bw2analyzer.matrix_grapher import SparseMatrixGrapher
 from functools import cmp_to_key
+import matplotlib.pyplot as plt
+from bw2data.parameters import ActivityParameter, DatabaseParameter, ProjectParameter, Group
 import brightway2 as bw
+import numpy as np
 import json
 import csv
 import sys
@@ -61,7 +65,7 @@ db  = bw.Database(DB_NAME)
 bio = bw.Database('biosphere3')
 
 #DEFINE AVOID LISTS
-avoid_activities = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
+avoid_activities              = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
     
 #MATERIAL SELECTION
 #hint: use markets instead of production activities as they conveniently include all the regional prod. activities and there's no need to list them separately
@@ -75,10 +79,7 @@ materials_dict_cutoff310 = {
 #import materials_dict from JSON
 with open('dict_gen/plastics_dict_ecoinvent-3.10-cutoff_m.json', 'r') as fp:
     materials_dict_cutoff310["Plastics"] = json.load(fp) 
-#flatten all tuples under 'Metals' into a single list
-combined_plastics = [item for sublist in materials_dict_cutoff310["Plastics"].values() for item in sublist]
-materials_dict_cutoff310["Plastics"] = {"Total": combined_plastics}
-
+    
 #FUNCTIONS:
 def activity_by_name(name, db): #return first activity dataset based on name keyword
     candidates = [x for x in db if name in x['name']]
@@ -242,8 +243,6 @@ def db_to_csv(db): #save datasets (name, key) into the csv file
 #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
 #db_inc_filter(db, avoid_activities) 
 
-print(combined_plastics)
-
 #lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
 #for exc in act.technosphere():
 #    print(exc.as_dict())
@@ -257,7 +256,7 @@ for prod in prod_list:
     print("\n>>> BEFORE filtering:\n")
     print(f'\u25A0 Material footprint, MF (based on inventory vector) in {FU} {act}:')
     materials_inv(BIO_MAT_LIST, lca, prod)
-    print("\u25A0 Material footprint, MF (based on supply array):")
+    print("\n\u25A0 Material footprint, MF (based on supply array):")
     materials_sup(materials_dict_cutoff310, lca, prod) 
 
     lca_exclude_noninc(db, lca) #edit matrix (technosphere)
@@ -266,7 +265,7 @@ for prod in prod_list:
     print("\n>>> AFTER filtering:\n")
     print(f'\u25A0 Material composition, MC (based on inventory vector) in {FU} {act}:')
     materials_inv(BIO_MAT_LIST, lca, prod)
-    print("\u25A0 Material composition, MC (based on supply array):")
+    print("\n\u25A0 Material composition, MC (based on supply array):")
     materials_sup(materials_dict_cutoff310, lca, prod)
         
 print('DONE')

@@ -11,12 +11,18 @@ Created on Wed Oct  9 08:47:41 2019
 
 import json
 import pandas as pd
+import os
+import sys
 from fuzzywuzzy import fuzz
 from fuzzywuzzy import process
 
+# Get the directory where the script is located and set the current working directory to the script's directory
+script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+os.chdir(script_dir)
+
 #Const
 file_name = 'plastics'
-db_name = 'conseq36'
+db_name = 'ecoinvent-3.10-cutoff'
 LIMIT_SCORE = 100
 PET_CORRECT = True
 
@@ -73,7 +79,7 @@ df['plastic_name'] = pd.Series(name_match)
 df['correct_ratio'] = pd.Series(ratio_match)
 df['key'] = ei['key']
 
-#select markets 
+#select markets
 df = df[df["ei_name"].str.contains('market')]
 
 #filter our unrelated activities
@@ -90,7 +96,7 @@ df = df[['key','Symbol']]
 
 df['db'] = db_name
 
-df_dict = df.groupby('Symbol')[['db','key']].apply(lambda g: list(map(tuple, g.values.tolist()))).to_dict()
+df_dict = df.groupby('Symbol')[['db','key']].apply(lambda g: tuple(map(tuple, g.values.tolist()))).to_dict()
 
 
 # dictionary in the end        
