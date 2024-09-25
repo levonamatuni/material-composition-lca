@@ -34,21 +34,30 @@ Created on Wed Jul 17 2019
 
 #IMPORTS:
 import brightway2 as bw #import Brightway package 
+import bw2io as bi
 import numpy as np #import Numpy package 
+import os
+import sys
+from brightway2 import *
 
 #CONSTANTS:
 PROD = 'laptop' #the name of the reference product (unit process) of interest whose MC we aim to estimate; there should be an activity named PROD in your 'db' database, otherwise an error will pop-up
 BIO_MAT_LIST  = ["Copper", "Oil, crude"] #the natural material of interest (the appropariate flow in the biospere database will be selected later on based on this name). The name should start with the capital letter (see conventional names of materials/metals in the biosphere3 database)
 DB_NAME   = 'db' #the LCI database that will be imported and used (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper referenced below (incl. copper extraction, factory, motherboard production, etc)
 KEY_index = 1 #index of the actual activity/bioflow key in a conventional tuple key like (db, key)  
+DB_PATH = 'pmc-algorithm-general-extras/db.xlsx' #path to the simple laptop db exported by Activity Browser 
 
-#PREPARATIONS:
-    
+#PREPARATIONS:   
 #bw.bw2setup() #Set up the Brightway2 environment (if not already set up)
+#bi.create_core_migrations() should be done only once during the set up of the project, it checks if all the names are correct
 #bw.projects.new_project("My LCA project") #Create a new Brightway project named "My LCA project", 
 bw.projects.set_current("default") #Opens the existing default project
-db  = bw.Database(DB_NAME) #Imports the selected LCI database (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper (incl. copper extraction, factory, motherboard production, etc)
+db  = bw.Database(DB_NAME) #links to the existing LCI database in this project (can be ecoinvent in real applications). In our case, it is called 'db' and was first created in Activity Browser, defining a simplified laptop supply chain described in the paper (incl. copper extraction, factory, motherboard production, etc); the db can be also imported from Excel instead using db_excel_import(DB_PATH)
 bio = bw.Database('biosphere3')
+
+# Get the directory where the script is located and set the current working directory to the script's directory
+script_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+os.chdir(script_dir)
 
 #THE VOID LIST:
 #   Here we define the list of keywords (inputs) that will be filtered our from the supply chain as being non-incorporated in the following products (see the Paper)
@@ -117,7 +126,20 @@ def print_techno_matrix(lca):
     for i in range(matrix_size):
         print("\n")
         for j in range(matrix_size):
-            print(lca.technosphere_matrix[i, j], end = ' ')         
+            print(lca.technosphere_matrix[i, j], end = ' ')    
+
+def db_excel_import(path):
+    xl_importer = bi.importers.ExcelImporter()
+    #if biospheer name is different 
+    # for data_item in xl_importer.data:
+    #     for exchange in data_item["exchanges"]:
+    #         if exchange["type"] == "biosphere" and exchange["database"] == "biosphere3":
+    #             print(f"Update bio db name for {exchange}")
+    #             exchange["database"] = BIO_DB_NAME
+    xl_importer.apply_strategies()
+    xl_importer.statistics()
+    if xl_importer.statistics(print_stats=False)[2] == 0:
+        xl_importer.write_database()     
 
 #MAIN CODE:
 #   Here, our algorithm starts executing using the variables and functions provided above
