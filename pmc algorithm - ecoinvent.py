@@ -79,6 +79,38 @@ with open('dict_gen/plastics_dict_ecoinvent-3.10-cutoff_m.json', 'r') as fp:
 combined_plastics = [item for sublist in materials_dict_cutoff310["Plastics"].values() for item in sublist]
 materials_dict_cutoff310["Plastics"] = {"Total": combined_plastics}
 
+#MAIN CODE:
+def main():
+    #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
+    #db_inc_filter(db, avoid_activities) 
+
+    #lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
+    #for exc in act.technosphere():
+    #    print(exc.as_dict())
+
+    #For each product of interest, list it MF (material footprint) and MC (material composition) after technosphere filtering 
+    for prod in prod_list:
+        act = activity_by_name(prod, db)
+        lca = LCA_create(act, FU)
+        lca.lci() #creates technosphere
+
+        print("\n>>> BEFORE filtering:\n")
+        print(f'\u25A0 Material footprint, MF (based on inventory vector) in {FU} {act}:')
+        materials_inv(BIO_MAT_LIST, lca, prod)
+        print("\u25A0 Material footprint, MF (based on supply array):")
+        materials_sup(materials_dict_cutoff310, lca, prod) 
+
+        lca_exclude_noninc(db, lca) #edit matrix (technosphere)
+        lca.lci_calculation()
+
+        print("\n>>> AFTER filtering:\n")
+        print(f'\u25A0 Material composition, MC (based on inventory vector) in {FU} {act}:')
+        materials_inv(BIO_MAT_LIST, lca, prod)
+        print("\u25A0 Material composition, MC (based on supply array):")
+        materials_sup(materials_dict_cutoff310, lca, prod)
+            
+        print('The calculations ended successfully.')
+
 #FUNCTIONS:
 def activity_by_name(name, db): #return first activity dataset based on name keyword
     candidates = [x for x in db if name in x['name']]
@@ -237,36 +269,6 @@ def db_to_csv(db): #save datasets (name, key) into the csv file
         writer.writerows(list)
     return str(db) + " saved into " + db.name + '.csv'
 
-#MAIN CODE:
-
-#Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
-#db_inc_filter(db, avoid_activities) 
-
-print(combined_plastics)
-
-#lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
-#for exc in act.technosphere():
-#    print(exc.as_dict())
-
-#For each product of interest, list it MF (material footprint) and MC (material composition) after technosphere filtering 
-for prod in prod_list:
-    act = activity_by_name(prod, db)
-    lca = LCA_create(act, FU)
-    lca.lci() #creates technosphere
-
-    print("\n>>> BEFORE filtering:\n")
-    print(f'\u25A0 Material footprint, MF (based on inventory vector) in {FU} {act}:')
-    materials_inv(BIO_MAT_LIST, lca, prod)
-    print("\u25A0 Material footprint, MF (based on supply array):")
-    materials_sup(materials_dict_cutoff310, lca, prod) 
-
-    lca_exclude_noninc(db, lca) #edit matrix (technosphere)
-    lca.lci_calculation()
-
-    print("\n>>> AFTER filtering:\n")
-    print(f'\u25A0 Material composition, MC (based on inventory vector) in {FU} {act}:')
-    materials_inv(BIO_MAT_LIST, lca, prod)
-    print("\u25A0 Material composition, MC (based on supply array):")
-    materials_sup(materials_dict_cutoff310, lca, prod)
-        
-print('DONE')
+# Call the main function if the script is run directly, not when it is imported as a module
+if __name__ == "__main__":
+    main()
