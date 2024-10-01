@@ -39,11 +39,6 @@ os.chdir(script_dir)
 #CONSTANTS
 FLOAT_RND = 5
 LAPTOP = 'computer production, laptop'
-FRIDGE = 'refrigerator production'
-CAR_D = 'passenger car production, diesel'
-CAR_P = 'passenger car production, petrol/natural gas'
-CAR_E_motor = 'electric motor production, vehicle (electric powertrain)'
-SCOOTER_E_motor = 'electric motor production, for electric scooter'
 prod_list = [LAPTOP]
 prod_wght = [3.15] #kg per product from Ecoinvent 3.6
 METHOD_KEY = ('ReCiPe 2016 v1.03, endpoint (H)', 'natural resources', 'material resources: metals/minerals') #selected method from the list of impact methods; in practice arbitrary as it does not impact the resulting inventory/supply vectors but is needed to run the lca.lci() command
@@ -56,7 +51,7 @@ DB_NAME = 'ecoinvent-3.10-cutoff' #'consequential310'
 #PREPARATIONS:
 #bw2setup() #set up the Brightway2 environment (if not already set up)
 #assumed that you already have default bw env and ecoinvent database that is called 'consequential310' - change if needed
-projects.set_current("default")
+projects.set_current("material-composition")
 db  = bw.Database(DB_NAME)
 bio = bw.Database('biosphere3')
 
@@ -83,10 +78,6 @@ materials_dict_cutoff310["Plastics"] = {"Total": combined_plastics}
 def main():
     #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
     #db_inc_filter(db, avoid_activities) 
-
-    #lists description of each inout ('exc') in the activity 'act': key, name, amount, unit, CPC code, etc
-    #for exc in act.technosphere():
-    #    print(exc.as_dict())
 
     #For each product of interest, list it MF (material footprint) and MC (material composition) after technosphere filtering 
     for prod in prod_list:
