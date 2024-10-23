@@ -26,7 +26,9 @@ Created on Thu Aug 22 18:01:26 2019
 #IMPORTS:
 from brightway2 import *
 from functools import cmp_to_key
-import brightway2 as bw
+import bw2io as bi
+import bw2calc as bc
+import bw2data as bd
 import json
 import csv
 import sys
@@ -52,8 +54,9 @@ DB_NAME = 'ecoinvent-3.10-cutoff' #'consequential310'
 #bw2setup() #set up the Brightway2 environment (if not already set up)
 #assumed that you already have default bw env and ecoinvent database that is called 'consequential310' - change if needed
 projects.set_current("material-composition")
-db  = bw.Database(DB_NAME)
-bio = bw.Database('biosphere3')
+db  = bd.Database(DB_NAME)
+#db = bi.import_ecoinvent_release(version="3.10", system_model="cutoff", username="LUCML", password="ecoV3JG62,0")
+bio = bd.Database('ecoinvent-3.10-biosphere')
 
 #DEFINE AVOID LISTS
 avoid_activities = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
@@ -76,6 +79,9 @@ materials_dict_cutoff310["Plastics"] = {"Total": combined_plastics}
 
 #MAIN CODE:
 def main():
+    print("Databases in the current project: ", list(bd.databases))
+    print("Selected database: ", db)
+
     #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
     #db_inc_filter(db, avoid_activities) 
 
@@ -125,7 +131,7 @@ def product_inputs(prod, db):
     act = activity_by_name(prod, db)
     for exc in act.technosphere():
         try:
-            print(bw.get_activity(exc["input"])._document.product, exc['incorporated'])
+            print(bd.get_activity(exc["input"])._document.product, exc['incorporated'])
         except: 
             print('Error: Not all of the exchanges in your LCI database have the incorporation parameter assigned!')
             sys.exit(1) 
@@ -144,7 +150,7 @@ def db_inc_filter(db, avoid_activities):
             prt = pr
         for exc in act.technosphere():
             avoid = False
-            in_act = bw.get_activity(exc["input"])
+            in_act = bd.get_activity(exc["input"])
             exc_name = in_act._document.product #product name; same as exc["name"] but works for manual db
             for word in avoid_activities:
                 if word in exc_name: #name of the product of the exchange
@@ -199,7 +205,7 @@ def lca_exclude_noninc(db, lca):
 #Creates an LCA object based on the reference product 'act' in the database 'db' and the bioflow 'material_bioflow' of interest     
 def LCA_create(act, FU): 
     functional_unit = {act: FU}
-    return bw.LCA(functional_unit, METHOD_KEY)
+    return bc.LCA(functional_unit, METHOD_KEY)
 
 #'prod' is passed for a proper relative weight calculation
 def materials_inv(mat_list, lca, prod): 
