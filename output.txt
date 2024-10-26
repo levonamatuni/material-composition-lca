@@ -139,3 +139,5 @@
  'computer production, laptop' (unit, GLO, None)  from  ecoinvent-3.10-cutoff
 
  'computer production, laptop' (unit, GLO, None)  from  ecoinvent-3.10-cutoff
+
+ 'computer production, laptop' (unit, GLO, None)  from  ecoinvent-3.10-cutoff

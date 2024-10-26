@@ -24,7 +24,6 @@ Created on Thu Aug 22 18:01:26 2019
 #   Reviewing explanatory comments under the general script first.
 
 #IMPORTS:
-from brightway2 import *
 from functools import cmp_to_key
 import bw2io as bi
 import bw2calc as bc
@@ -48,15 +47,18 @@ BIO_MAT_LIST = ["Copper", "Aluminium", "Tantalum"] #the natural materials of int
 FU = 1 #amount of the functional unit
 FILE_OUT = 'output.txt'
 KEY_index = 1 #index of the actual activity/bioflow key in a conventional tuple key like (db, key)
-DB_NAME = 'ecoinvent-3.10-cutoff' #'consequential310'
+DB_NAME = 'ecoinvent-3.10-cutoff' #name of your LCI database in your Brightway project
+BIO_DB_NAME = 'ecoinvent-3.10-biosphere' #name of your bioflows database in your Brightway project 
 
 #PREPARATIONS:
-#bw2setup() #set up the Brightway2 environment (if not already set up)
-#assumed that you already have default bw env and ecoinvent database that is called 'consequential310' - change if needed
-projects.set_current("material-composition")
-db  = bd.Database(DB_NAME)
-#db = bi.import_ecoinvent_release(version="3.10", system_model="cutoff", username="LUCML", password="ecoV3JG62,0")
-bio = bd.Database('ecoinvent-3.10-biosphere')
+#assumes that you already have a brightway project called "material-composition" and ecoinvent database in it that is called DB_NAME - change if needed;
+#otherwise first create a project, activate it, and download the ecoinvent using your credentials:
+#bd.projects.create_project("material-composition")
+#bd.projects.set_current("material-composition") 
+#db = bi.import_ecoinvent_release(version="3.10", system_model="cutoff", username="---", password="---")
+bd.projects.set_current("material-composition") 
+db = bd.Database(DB_NAME)
+bio = bd.Database(BIO_DB_NAME)
 
 #DEFINE AVOID LISTS
 avoid_activities = ["treatment", "water", "waste", "container", "box", "packaging", "foam", "electricity", "factory", "adapter", "oxidation", "construction", "heat", "facility", "gas", "freight", "mine", "infrastructure", "conveyor", "road", "building", "used", "maintenance", "transport", "moulding", "mold", "wastewater", "steam", "scrap", "converter"]
@@ -83,7 +85,7 @@ def main():
     print("Selected database: ", db)
 
     #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
-    #db_inc_filter(db, avoid_activities) 
+    db_inc_filter(db, avoid_activities) 
 
     #For each product of interest, list it MF (material footprint) and MC (material composition) after technosphere filtering 
     for prod in prod_list:
