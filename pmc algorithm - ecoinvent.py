@@ -85,7 +85,7 @@ def main():
     print("Selected database: ", db)
 
     #Run through ecoinvent activities and assign material incorporation parameter (from 0 to 1) to each exchange based on the list of keywords in the 'avoid_activities' list of keywords
-    db_inc_filter(db, avoid_activities) 
+    #db_inc_filter(db, avoid_activities) 
 
     #For each product of interest, list it MF (material footprint) and MC (material composition) after technosphere filtering 
     for prod in prod_list:
