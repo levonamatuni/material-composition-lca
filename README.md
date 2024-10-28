@@ -1,17 +1,24 @@
-# material-composition-lca
-Estimating material composition of products using LCI databases
-L. Amatuni. 2021
-CML, Leiden University
+# Estimating material composition of products using LCI databases
 
-General description:
-This software allows estimating the material composition of various products reported in the ecoinvent LCI database.
-The software originated withing a scientific work described in the following article where the methodological steps are described in detail: {article submitted to publisher}
+Developed at the Institute of Environmental Sciences (CML) at Leiden University
 
-How to:
-1. Use either Activity Browser or Brightway to create a new project and get access to the ecoinvent database version 3.6
-2. Run the appropriate functions from main.py to obtain estimates for a material and product of interest (see the comments for details)
-3. If adjustment of the list of plastics is required, explore and run the dict_gen/mat_dict_gen.py file before step 2 
+## General description:
 
-Activity Browser:
-A modified version of Activity Browser is provided under the 'add-diffusion' branch of the original repository:
-https://github.com/LCA-ActivityBrowser/activity-browser.git
+This software allows estimating the product material composition (PMC) of various goods using ecoinvent LCI database.
+The software originated within a scientific work described in the following article where the methodological steps are described in detail:
+Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology. https://doi.org/10.1111/jiec.13538
+We highly recommend visiting that work first for a solid understanding and implementation of this product composition estimation algorithm.
+
+## Requirements:
+
+- Running Brightway package in your Python environment
+- Access to ecoinvent database (or any other LCI database in Brightway)
+
+## How to:
+
+1. The `pmc algorithm - general.py` file describes the general algorithm for any kind of LCI database you have access to in Brightway environment. Has very detailed comments and explanations. Still, reading the paper above first is highly recommended. Also, the following file might be more applicable if you want to jump straight to real cases and tasks of yours using ecoinvent.
+2. The `pmc algorithm - ecoinvent.ipynb` Jupyter Notebook allows you to run all the steps of the algorithm one by one while estimating the content of selected materials in any chosen product in your ecoinvent database in an accessible (for non-experts) format.
+3. The `pmc algorithm - ecoinvent.py` file assumes an understanding of the general algorithm and allows you to run the script immediately to estimate specific materials' content in any chosen product in your ecoinvent database. Minimum comments provided.
+
+We are always happy to receive feedback or provide support for the application of our algorithm to the real-world products you work with.
+Please, contact: l.t.amatuni@cml.leidenuniv.nl

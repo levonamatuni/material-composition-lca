@@ -5,7 +5,8 @@
 
 """
 Created on Wed Jul 17 2019
-@author: amatunilt
+Updated on Mon Oct 28 2024 
+@author: amatunilt (Levon Amatuni)
 """
 
 #NOTES:
@@ -18,6 +19,7 @@ Created on Wed Jul 17 2019
 #
 #   In case if you would like to start this script running asap, use the db_database.csv and db_database_copper flow.svg files 
 #   to quickly manually recreate a simple LCI laptop dataset (even simpler than that in the Paper) in Activity Browser or Brightway the way how it is described in these two files.
+#   You can also simply import that database from the provided db.xlsx file using Activity Browser.
 #   Additionally, you need to assign:
 #   1 kg of 'plastic; enters 'laptop directly' (technosphere flow),
 #   1 kg of 'Oil, crude' is assigned to 'plastic' activity (elementary flow), and

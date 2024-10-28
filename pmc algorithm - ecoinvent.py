@@ -4,8 +4,9 @@
 # Licensed under the Apache License, version 2.0. See LICENSE for details.
 
 """
-Created on Thu Aug 22 18:01:26 2019
-@author: amatunilt
+Created on Thu Aug 22 2019
+Updated on Mon Oct 28 2024 
+@author: amatunilt (Levon Amatuni)
 """
 
 #NOTES:
@@ -45,7 +46,6 @@ prod_wght = [3.15] #kg per product from Ecoinvent 3.6
 METHOD_KEY = ('ReCiPe 2016 v1.03, endpoint (H)', 'natural resources', 'material resources: metals/minerals') #selected method from the list of impact methods; in practice arbitrary as it does not impact the resulting inventory/supply vectors but is needed to run the lca.lci() command
 BIO_MAT_LIST = ["Copper", "Aluminium", "Tantalum"] #the natural materials of interest (the appropariate flows in the biospere database will be selected later on based on this names). Each name should start with the capital letter (see conventional names of materials/metals in the biosphere3 database)
 FU = 1 #amount of the functional unit
-FILE_OUT = 'output.txt'
 KEY_index = 1 #index of the actual activity/bioflow key in a conventional tuple key like (db, key)
 DB_NAME = 'ecoinvent-3.10-cutoff' #name of your LCI database in your Brightway project
 BIO_DB_NAME = 'ecoinvent-3.10-biosphere' #name of your bioflows database in your Brightway project 
@@ -114,8 +114,6 @@ def main():
 def activity_by_name(name, db): #return first activity dataset based on name keyword
     candidates = [x for x in db if name in x['name']]
     candidates = sorted(candidates, key=cmp_to_key(lambda item1, item2: len(item1['name']) - len(item2['name'])))  #shortest name is the best match
-    with open(FILE_OUT, 'a') as f:
-        print('\n', candidates[0], ' from ', db.name, file=f)
     return candidates[0]
 
 def activity_by_key(key, db): # key = tuple(db, key) -> activity (dataset) in db
