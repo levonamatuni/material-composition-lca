@@ -5,6 +5,7 @@ Developed at the Institute of Environmental Sciences (CML) at Leiden University
 ## General description:
 
 This software allows estimating the product material composition (PMC) of various goods using ecoinvent LCI database.
+
 The software originated within a scientific work described in the following article where the methodological steps are described in detail:
 Amatuni, L., Steubing, B., Heijungs, R., Yamamoto, T., & Mogollón, J. M. (2024). Deriving material composition of products using life cycle inventory databases. Journal of Industrial Ecology, 28(5), 1060-1072. https://doi.org/10.1111/jiec.13538
 We highly recommend visiting that work first for a solid understanding and implementation of this product composition estimation algorithm.
