@@ -207,6 +207,9 @@ def LCA_create(act, FU):
     functional_unit = {act: FU}
     return bc.LCA(functional_unit, METHOD_KEY)
 
+#Given predefined natural materials in the 'mat_list' (see BIO_MAT_LIST above), prints 
+# resulting material fllows (MC or MF of a product, depending if filtering was applied) 
+# using the 'inventory vector' (see Paper) from the resulting 'lca' object
 #'prod' is passed for a proper relative weight calculation
 def materials_inv(mat_list, lca, prod): 
     for flow_index, amount in enumerate(lca.inventory.sum(axis=1).flat): # lca.inventory.sum(axis=1).flat gives you the summed inventory for each biosphere flow
